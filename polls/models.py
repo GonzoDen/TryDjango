@@ -1,3 +1,4 @@
+#model are responsible for the short description of the database structure
 import datetime
 
 from django.db import models
