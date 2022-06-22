@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.template import loader
 from django.views import generic
+from django.utils import timezone
 
 from .models import Question, Choice
 
@@ -20,6 +21,9 @@ class IndexView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
+
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte=timezone.now)
 
 
 class ResultsView(generic.DetailView):
@@ -42,7 +46,7 @@ def vote(request, question_id):
 
 
 
-"""def index(request):
+def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     #output = ', '.join([q.question_text for q in latest_question_list])
     template = loader.get_template('polls/index.html')
@@ -69,4 +73,3 @@ def wrong(request, question_id):
 def results(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/results.html', {'question': question})
-"""
